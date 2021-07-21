@@ -21,7 +21,8 @@ jobs:
 
       - name: Set variable
         env: 
-          newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
+          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
+        run: echo "${{ env.oldHash }}"
       
       - name: Install requests
         run: pip3 install requests
@@ -36,7 +37,7 @@ jobs:
       - name: Set variable
         env: 
           newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
-        run: echo "${{ env.oldHash }}" "${{ env.newHash }}"
+        run: echo "${{ env.newHash }}"
         
       - name: Push commit
         if: ${{ env.oldHash != env.newHash }}
