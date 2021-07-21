@@ -21,14 +21,17 @@ jobs:
       - name: Install requests
         run: pip3 install requests
 
-      - name: Update Rules
+      - name: Update rules
+        env: 
+          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
         run: |
           cd factory
           python3 gfwlist.py
           python3 build_confs.py
           cd ..
 
-      - name: Push Commit
+      - name: Push commit
+        if: ${{ env.oldHash == hashFiles('factory/resultant/gfw.list') }}
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'github-action@users.noreply.github.com'
