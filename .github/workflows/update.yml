@@ -24,7 +24,7 @@ jobs:
 
       - name: Update rules
         env:
-          oldFile: ${{ hashFile('banlist.conf') }}
+          oldFile: ${{ hashFiles('banlist.conf') }}
         run: |
           cd factory
           python3 gfwlist.py
@@ -33,7 +33,7 @@ jobs:
         
       - name: Push commit
         env:
-          newFile: ${{ hashFile('banlist.conf') }}
+          newFile: ${{ hashFiles('banlist.conf') }}
         if: ${{ env.oldHash != env.newHash }}
         run: |
           git config --global user.name 'GitHub Action'
