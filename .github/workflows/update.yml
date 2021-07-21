@@ -10,6 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+
     steps:
       - uses: actions/checkout@v2
     
@@ -19,11 +20,13 @@ jobs:
           python-version: 3.9
       
       - name: Install requests
+        env:
+          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
         run: pip3 install requests
 
       - name: Update rules
         env: 
-          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
+          newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
         run: |
           cd factory
           python3 gfwlist.py
@@ -31,7 +34,7 @@ jobs:
           cd ..
 
       - name: Push commit
-        if: ${{ env.oldHash != hashFiles('factory/resultant/gfw.list') }}
+        if: ${{ env.oldHash != env.newHash }}
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'github-action@users.noreply.github.com'
