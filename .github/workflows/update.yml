@@ -18,10 +18,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
+
+      - name: Set variable
+        env: 
+          newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
       
       - name: Install requests
-        env:
-          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
         run: pip3 install requests
 
       - name: Update rules
@@ -31,9 +33,11 @@ jobs:
           python3 build_confs.py
           cd ..
 
-      - name: Push commit
+      - name: Set variable
         env: 
           newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
+        
+      - name: Push commit
         if: ${{ env.oldHash != env.newHash }}
         run: |
           git config --global user.name 'GitHub Action'
