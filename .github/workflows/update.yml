@@ -22,7 +22,7 @@ jobs:
       - name: Install requests
         run: |
           pip3 install requests
-          echo "oldHash=$(md5sum banlist.conf | awk '{print $1}')" >> $GITHUB_ENV
+          echo "oldHash=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
 
       - name: Update rules
         run: |
@@ -30,7 +30,7 @@ jobs:
           python3 gfwlist.py
           python3 build_confs.py
           cd ..
-          echo "newHash=$(md5sum banlist.conf | awk '{print $1}')" >> $GITHUB_ENV
+          echo "newHash=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
         
       - name: Push commit
         if: ${{ env.oldHash != env.newHash }}
