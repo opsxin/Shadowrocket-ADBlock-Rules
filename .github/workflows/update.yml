@@ -36,6 +36,7 @@ jobs:
       - name: Set variable
         env: 
           newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
+        run: echo "${{ env.oldHash }}" "${{ env.newHash }}"
         
       - name: Push commit
         if: ${{ env.oldHash != env.newHash }}
