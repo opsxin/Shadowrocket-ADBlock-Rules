@@ -20,20 +20,19 @@ jobs:
           python-version: 3.9
       
       - name: Install requests
-        run: pip3 install requests
+        run: |
+          pip3 install requests
+          echo "oldHash=$(md5sum banlist.conf | awk '{print $1}')" >> $GITHUB_ENV
 
       - name: Update rules
-        env:
-          oldFile: ${{ hashFiles('banlist.conf') }}
         run: |
           cd factory
           python3 gfwlist.py
           python3 build_confs.py
           cd ..
+          echo "newHash=$(md5sum banlist.conf | awk '{print $1}')" >> $GITHUB_ENV
         
       - name: Push commit
-        env:
-          newFile: ${{ hashFiles('banlist.conf') }}
         if: ${{ env.oldHash != env.newHash }}
         run: |
           git config --global user.name 'GitHub Action'
