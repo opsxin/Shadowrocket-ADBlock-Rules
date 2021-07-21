@@ -18,24 +18,22 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
-      - name: Set variable
-        run: echo "oldFile=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
       
       - name: Install requests
         run: pip3 install requests
 
       - name: Update rules
+        env:
+          oldFile: ${{ hashFile('banlist.conf') }}
         run: |
           cd factory
           python3 gfwlist.py
           python3 build_confs.py
           cd ..
-
-      - name: Set variable
-        run: echo "newFile=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
         
       - name: Push commit
+        env:
+          newFile: ${{ hashFile('banlist.conf') }}
         if: ${{ env.oldHash != env.newHash }}
         run: |
           git config --global user.name 'GitHub Action'
