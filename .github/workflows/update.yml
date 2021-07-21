@@ -20,9 +20,7 @@ jobs:
           python-version: 3.9
 
       - name: Set variable
-        env: 
-          oldHash: ${{ hashFiles('factory/resultant/gfw.list') }}
-        run: echo "${{ env.oldHash }}"
+        run: echo "oldFile=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
       
       - name: Install requests
         run: pip3 install requests
@@ -35,9 +33,7 @@ jobs:
           cd ..
 
       - name: Set variable
-        env: 
-          newHash: ${{ hashFiles('factory/resultant/gfw.list') }}
-        run: echo "${{ env.newHash }}"
+        run: echo "newFile=$(md5sum factory/resultant/gfw.list | awk '{print $1}')" >> $GITHUB_ENV
         
       - name: Push commit
         if: ${{ env.oldHash != env.newHash }}
